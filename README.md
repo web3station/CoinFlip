@@ -1,5 +1,9 @@
 # CoinFlip challenge
 
+Solve [Eternaut CoinFlip Challenge](https://ethernaut.openzeppelin.com/level/3). The simplest solution is to deploy a contract with a function that calculates the expected coin flip using the same algorithm as the flip function and then calls CoinFlip contract with the expected result. There are several documented solutions online: [solution1](https://www.goodbytes.be/article/ethernaut-walkthrough-level-3-coin-flip) or [solution2](https://hackernoon.com/how-to-solve-the-level-3-of-the-ethernaut-game). But I wanted to hack CoinFlip directly off-chain without deploying any extra contract.
+
+This works fine on local environment but not always easy to use on a public testnet as you are not 100% certain that your transactions will be included by the miners in the correct block.
+
 Run `yarn` to install dependencies.
 
 ## Hack `CoinFlip` locally

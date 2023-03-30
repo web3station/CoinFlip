@@ -1,17 +1,38 @@
 import { ethers } from "hardhat";
 
 async function main() {
+  // Access the Hardhat Runtime Environment (hre)
+  const hre = require("hardhat");
+  console.log("Compiling Contracts");
+  await hre.run("compile");
+
   const CoinFlip = await ethers.getContractFactory("CoinFlip");
   const coinFlip = await CoinFlip.deploy();
 
-  await coinFlip.deployed();
+  if (hre.network.name === "localhost" || hre.network.name === "hardhat") {
+    await coinFlip.deployed();
+  } else {
+    await coinFlip.deployTransaction.wait(3);
+  }
 
   console.log(`CoinFlip address ${coinFlip.address}`);
+  if (hre.network.name !== "localhost" && hre.network.name !== "hardhat") {
+    console.log("verify...");
+    try {
+      await hre.run("verify:verify", {
+        address: coinFlip.address,
+        constructorArguments: [],
+      });
+      console.log("Contract verified");
+    } catch (error) {
+      console.error((error as any).message);
+    }
+  }
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
